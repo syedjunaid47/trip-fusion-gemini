@@ -5,6 +5,7 @@ import ItineraryDisplay from "@/components/ItineraryDisplay";
 import { TravelFormData, TravelItinerary } from "@/types";
 import { getItinerary } from "@/services/geminiService";
 import { toast } from "sonner";
+import { MapPin, DollarSign, Clock } from "lucide-react";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
