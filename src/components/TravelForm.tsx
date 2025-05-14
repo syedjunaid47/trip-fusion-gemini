@@ -4,11 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar, MapPin, Users, DollarSign, Search } from "lucide-react";
+import { Calendar, MapPin, Users, DollarSign, Search, Plane } from "lucide-react";
 import { toast } from "sonner";
 import { TravelFormData } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { setGeminiApiKey } from "@/services/geminiService";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface TravelFormProps {
   onSubmit: (data: TravelFormData) => void;
@@ -42,6 +43,7 @@ const TravelForm: React.FC<TravelFormProps> = ({ onSubmit, isLoading }) => {
     budget: "",
     travelers: 1,
     interests: [],
+    includeFlights: false
   });
 
   // Set the default API key when the component mounts
@@ -229,6 +231,31 @@ const TravelForm: React.FC<TravelFormProps> = ({ onSubmit, isLoading }) => {
                   {interest}
                 </Badge>
               ))}
+            </div>
+          </div>
+
+          <div className="flex items-start space-x-2">
+            <Checkbox 
+              id="includeFlights" 
+              checked={formData.includeFlights}
+              onCheckedChange={(checked) => {
+                setFormData({
+                  ...formData,
+                  includeFlights: checked === true
+                });
+              }}
+            />
+            <div className="grid gap-1.5 leading-none">
+              <Label 
+                htmlFor="includeFlights" 
+                className="text-sm font-medium leading-none flex items-center gap-2 cursor-pointer"
+              >
+                <Plane className="h-4 w-4" />
+                Include flight information
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Get transportation details using SERAPI flights API
+              </p>
             </div>
           </div>
         </form>

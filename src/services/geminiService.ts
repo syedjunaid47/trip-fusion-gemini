@@ -1,6 +1,6 @@
-
 import { TravelFormData, TravelItinerary } from "../types";
 import { toast } from "sonner";
+import { getFlights } from "./flightsService";
 
 // In a real application, the API key should be stored securely
 // This is just for demo purposes - in production, this would be handled by a backend service
@@ -56,7 +56,29 @@ export const getItinerary = async (formData: TravelFormData): Promise<TravelItin
       throw new Error("No response from Gemini API");
     }
     
-    return parseItineraryResponse(responseText, formData);
+    const itinerary = parseItineraryResponse(responseText, formData);
+    
+    // If user requested flight information, fetch it
+    if (formData.includeFlights) {
+      try {
+        toast.info("Fetching flight information...");
+        const flightsData = await getFlights(
+          formData.source,
+          formData.destination,
+          formData.startDate
+        );
+        
+        if (flightsData) {
+          itinerary.flights = flightsData.best_flights;
+          toast.success("Flight information added to your itinerary!");
+        }
+      } catch (error) {
+        console.error("Error fetching flights:", error);
+        toast.error("Could not fetch flight information, but your itinerary is ready.");
+      }
+    }
+    
+    return itinerary;
   } catch (error) {
     console.error("Error generating itinerary:", error);
     toast.error("Failed to generate itinerary. Please try again later.");

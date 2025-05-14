@@ -7,6 +7,7 @@ export interface TravelFormData {
   budget: string;
   travelers: number;
   interests: string[];
+  includeFlights?: boolean;
 }
 
 export interface ItineraryDay {
@@ -35,4 +36,5 @@ export interface TravelItinerary {
   };
   days: ItineraryDay[];
   tips: string[];
+  flights?: any;
 }
