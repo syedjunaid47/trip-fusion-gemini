@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -34,7 +34,6 @@ const interestOptions = [
 ];
 
 const TravelForm: React.FC<TravelFormProps> = ({ onSubmit, isLoading }) => {
-  const [apiKey, setApiKey] = useState("");
   const [formData, setFormData] = useState<TravelFormData>({
     source: "",
     destination: "",
@@ -45,11 +44,10 @@ const TravelForm: React.FC<TravelFormProps> = ({ onSubmit, isLoading }) => {
     interests: [],
   });
 
-  const handleApiKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const key = e.target.value;
-    setApiKey(key);
-    setGeminiApiKey(key);
-  };
+  // Set the default API key when the component mounts
+  useEffect(() => {
+    setGeminiApiKey("AIzaSyAx94WJth-9k1P2D3Q9pHQ25XtqmQpZJec");
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
@@ -87,11 +85,6 @@ const TravelForm: React.FC<TravelFormProps> = ({ onSubmit, isLoading }) => {
     e.preventDefault();
 
     // Form validation
-    if (!apiKey) {
-      toast.error("Please enter your Gemini API key");
-      return;
-    }
-
     if (!formData.source) {
       toast.error("Please enter your departure location");
       return;
@@ -133,31 +126,6 @@ const TravelForm: React.FC<TravelFormProps> = ({ onSubmit, isLoading }) => {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-2">
-            <Label htmlFor="apiKey">Gemini API Key</Label>
-            <Input
-              id="apiKey"
-              name="apiKey"
-              type="password"
-              placeholder="Enter your Gemini API key"
-              value={apiKey}
-              onChange={handleApiKeyChange}
-              className="w-full"
-              autoComplete="off"
-            />
-            <p className="text-xs text-muted-foreground">
-              Get your API key from the{" "}
-              <a 
-                href="https://aistudio.google.com/app/apikey" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-primary underline"
-              >
-                Google AI Studio
-              </a>
-            </p>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="source" className="flex items-center gap-2">
